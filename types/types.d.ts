@@ -17,6 +17,7 @@ declare global {
 
     interface SavedCookieContent {
         categories: string[]
+        level: string[]
         revision: number
         data?: null | Record<string, Record<string, any> | string>
         rfc_cookie: boolean
@@ -66,14 +67,21 @@ declare global {
         value: string
         enabled?: boolean
         readonly?: boolean
+        reload?: 'on_disable' | 'on_clear'
+    }
+
+    interface CookieTableItem {
+        domain?: string
+        path?: string
+        is_regex?: boolean
+        [key: string]: string | boolean | undefined
     }
 
     interface BlockSetting {
         title: string
         description: string
         toggle?: ToggleSetting
-        cookie_table_headers?: Record<string, string>[]
-        cookie_table?: Record<string, string>[]
+        cookie_table?: CookieTableItem[]
     }
 
     interface SettingsModalLanguageSetting {
@@ -81,6 +89,9 @@ declare global {
         save_settings_btn?: string
         accept_all_btn?: string
         reject_all_btn?: string
+        close_btn_label?: string
+        cookie_table_caption?: string
+        cookie_table_headers?: Record<string, string>[]
         blocks?: BlockSetting[]
     }
 
@@ -98,6 +109,7 @@ declare global {
         cookie_path?: string
         cookie_domain?: string
         cookie_same_site?: string
+        cookie_name?: string
         use_rfc_cookie?: boolean
         force_consent?: boolean
         revision?: number
@@ -132,6 +144,7 @@ declare global {
         show(delay?: number, create_modal?: boolean): void
         eraseCookies(_cookies: string | string[], _path?: string, _domain?: string): void
         validCookie(cookie_name: string): boolean
+        validConsent(): boolean
         allowedCategory(cookie_category: string): boolean
         set(field: string, data: Record<string, any>): boolean
         get(field: string, cookie_name?: string): Record<string, any>
